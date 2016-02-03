@@ -46,3 +46,27 @@ crits = pycrits('http://localhost:8000', 'wxs', '<api_key>')
 params = {'c-size__gte': 1024 * 1024}
 print(crits.sample_count(params=params)) 
 ```
+
+Here is an example of using crits.domains to query mongodb and write all domains to a text file.
+
+```
+from pycrits import pycrits
+from datetime import datetime
+import requests
+import sys
+
+crits = pycrits('Your CRITS server', 'CRITS USERNAME', 'API KEY')
+rundate = datetime.now().strftime('-%H%M-%m-%d-%y')
+sys.stdout = open("results" +".txt", "w")
+
+
+# Disables SSL verification.
+# Accepts [True, False, and path to certificate file]
+crits.verify = False
+
+# Supresses SSL certification verification
+requests.packages.urllib3.disable_warnings()
+
+for obj in crits.domains():
+    print obj['domain']
+```
